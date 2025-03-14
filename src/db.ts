@@ -1,6 +1,8 @@
 import mongoose, {model, Schema} from "mongoose";
 
-// mongooese.connect laater on 
+// mongooese.connect laater on //
+//late move it on .evn 
+//mongoose.connect("mongodb+srv://ashishnitro5:aSxxxxxxxxxx8@cluster0.ldjsp.mongodb.net/IdeaCore");
 
 const UserSchema = new Schema({
     username: { type: String, unique: true, required:true,},
