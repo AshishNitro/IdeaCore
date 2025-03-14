@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { UserModel } from "./db";
 
+
 const app = express();
 app.use(express.json());
 
@@ -18,18 +19,20 @@ app.post("/api/v1/signup", async (req, res) =>{
 
         })
         res.json({
-            message: "You are sifned up"
+            message: "You are in "
         })
         }
         catch(e) {
             res.status(411).json ({
-                message: "you alread have an account"
+                message: "you alread have an account!"
             })
         }
 })
 
 
-app.post("/api/v1/signin", (req, res) =>{
+app.post("/api/v1/signin", async (req, res) =>{
+      
+     
     
 })
 

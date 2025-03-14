@@ -1,38 +1,37 @@
-import mongoose, {model, Schema} from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
+import dotenv from "dotenv";
+// will connect too database lateronn
+mongoose.connect("mongodb://localhost:27017/IdeaCore");
 
-// mongooese.connect laater on //
-//late move it on .evn 
-//mongoose.connect("mongodb+srv://ashishnitro5:aSxxxxxxxxxx8@cluster0.ldjsp.mongodb.net/IdeaCore");
 
+
+
+//  User Schema
 const UserSchema = new Schema({
-    username: { type: String, unique: true, required:true,},
-    password: { type: String, required: true,},
+    username: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
+});
 
-})
 export const UserModel = model("User", UserSchema);
 
-//
 
 const ContentSchema = new Schema({
-    title: String,
-    link: String,
-    tags:[{type:mongoose.Types.ObjectId,ref:'Tag'}],
-    type: String,
-    userId: {type: mongoose.Types.ObjectId, ref: 'User', required: true},
+    title: { type: String, required: true },
+    link: { type: String, required: true },
+    tags: [{ type: mongoose.Types.ObjectId, ref: "Tag" }],
+    type: { type: String, required: true },
+    userId: { type: mongoose.Types.ObjectId, ref: "User", required: true },
+});
 
-})
+export const ContentModel = model("Content", ContentSchema);
 
-//3
 
 const LinkSchema = new Schema({
-    hash: String,
-    userId: {type: mongoose.Types.ObjectId, ref:'User', required: true, unique:true},
-})
-
-
-// All the export links below it
+    hash: { type: String, required: true },
+    userId: { type: mongoose.Types.ObjectId, ref: "User", required: true, unique: true },
+});
 
 export const LinkModel = model("Links", LinkSchema);
-export const ContentModel = model("Content", ContentSchema);
+
 
 
