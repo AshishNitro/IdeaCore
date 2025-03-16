@@ -8,26 +8,27 @@ mongoose.connect("mongodb://localhost:27017/IdeaCore");
 
 //  User Schema
 const UserSchema = new Schema({
-    username: { type: String, unique: true, required: true },
-    password: { type: String, required: true },
+    username: { type: String, unique: true},
+    password: { type: String, },
 });
 
 export const UserModel = model("User", UserSchema);
 
 
 const ContentSchema = new Schema({
-    title: { type: String, required: true },
-    link: { type: String, required: true },
-    tags: [{ type: mongoose.Types.ObjectId, ref: "Tag" }],
-    type: { type: String, required: true },
-    userId: { type: mongoose.Types.ObjectId, ref: "User", required: true },
+    title: String,
+    link: String,
+    tags: [{type: mongoose.Types.ObjectId, ref: 'Tag'}],
+    type: String,
+    userId: {type: mongoose.Types.ObjectId, ref: 'User', required: true },
+   
 });
 
 export const ContentModel = model("Content", ContentSchema);
 
 
 const LinkSchema = new Schema({
-    hash: { type: String, required: true },
+    hash: String, 
     userId: { type: mongoose.Types.ObjectId, ref: "User", required: true, unique: true },
 });
 
