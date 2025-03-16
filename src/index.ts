@@ -1,9 +1,12 @@
 import jwt from "jsonwebtoken";
 import express from "express";
 import mongoose from "mongoose";
-import { ContentModel, UserModel } from "./db";
+import { ContentModel, UserModel , LinkModel } from "./db";
 import { JWT_PASSWORD } from "./config"
 import { useMiddleware } from "./middleware";
+import { random } from "./utils";
+import { hash } from "crypto";
+
 
 
 const app = express();
@@ -87,7 +90,7 @@ app.get("/api/v1/content",useMiddleware, async (req, res) =>{
     
 })
 
-app.delete("/api/v1/content", async (req, res) =>{
+app.delete("/api/v1/content", useMiddleware, async (req, res) =>{
     const contentId =req.body.contentId;
      
     await ContentModel.deleteMany({
@@ -100,6 +103,77 @@ app.delete("/api/v1/content", async (req, res) =>{
         message: "Deleted"
      })
     
+})
+
+app.post("/api/v1/ideaCore/share", useMiddleware, async (req, res) => {
+    const share = req.body.share;
+    const userId = req.userId;
+
+    if (share) {
+        const existingLink = await LinkModel.findOne({
+            userId: req.userId
+
+        })
+        if(existingLink){
+            res.json({
+                hash: existingLink.hash,
+            })
+            return;
+
+        }
+        const hash = random(10);
+        await LinkModel.create({
+            userId: req.body.userId,
+            hash: hash
+        })
+       
+    }
+    else{
+        await LinkModel.deleteOne({
+            userId: req.userId
+        });
+        res.json({
+            message: "Removed Link"
+        })
+    }
+
+})
+
+app.get("/api/v1/ideacore/:shareLink", async (req, res )=>{
+    const hash = req.params.shareLink;
+
+    const link = await LinkModel.findOne({
+        hash
+    });
+    if(!link){
+        res.status(411).json({
+            message: "Incorrect Input"
+        })
+        return;
+
+    }
+
+    const content = await ContentModel.find({
+        userId: link.userId
+    })
+    console.log(link);
+    const user = await UserModel.findOne({
+        _id: link.userId // Have to change if moved too diffrent database 
+
+    })
+    if(!user){
+        res.status(411).json({
+            message: " User Not Found"
+        })
+        return;
+
+    }
+    res.json({
+        username: user.username,
+        content: content,
+    })
+
+
 })
 
 app.listen(2002);
